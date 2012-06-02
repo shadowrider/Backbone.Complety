@@ -3,7 +3,7 @@
  * (c) 2012 Myroslav Pomazan
  *
  * Backbone-complety may be freely distributed under the MIT license.
- * For details and documentation: https://github.com/PaulUithol/Backbone-relational.
+ * For details and documentation: https://github.com/shadowrider/Backbone.Complety.
  * Depends on Backbone: https://github.com/documentcloud/backbone.
  * Depends on Zepto or jQuery: http://zeptojs.com/.
  */
