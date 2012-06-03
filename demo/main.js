@@ -12,8 +12,8 @@ require.config({
   },
   use: {
     "backbone-plugins/backbone.complety": {
-      deps: ["backbone"],
-      attach: function(Backbone) {
+      deps: ["backbone", "jquery"],
+      attach: function() {
         return Backbone;
       }
     }
@@ -22,7 +22,6 @@ require.config({
 
 require([
   'app'
-  ,'jquery'
 ],
   function(App) {
 

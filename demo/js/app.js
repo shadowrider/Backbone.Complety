@@ -1,15 +1,36 @@
 define(function(require, exports, module) {
 
   var _ = require('underscore');
-  var $ = require('jquery');
   var Backbone = require('backbone');
   var Complety = require('use!backbone-plugins/backbone.complety');
 
-  console.log($);
+
+  var Pupil = Backbone.Model.extend({
+    name: "",
+    age: 0
+  });
+
+  var Classroom = Backbone.Collection.extend({
+    model: Pupil
+  });
+
+  var gradeSix = new Classroom();
+  gradeSix.add(new Pupil({name: "Jack Black", age: 14}));
+
   var App = Backbone.View.extend({
 
     initialize: function() {
-      var complety = new Backbone.Complety();
+      var complety = new Backbone.Complety({
+        collection: gradeSix,
+        targetContainer: '.input-complete',
+        searchAttr: "name"
+      });
+      var complety = new Backbone.Complety({
+        collection: gradeSix,
+        targetContainer: '.area-complete',
+        isArea: true,
+        searchAttr: "name"
+      });
     },
 
     render: function(options) {
