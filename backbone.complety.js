@@ -2,7 +2,7 @@
  * Backbone.complety.js 0.1
  * (c) 2012 Myroslav Pomazan
  *
- * Backbone-complety may be freely distributed under the MIT license.
+ * Backbone.Complety may be freely distributed under the MIT license.
  * For details and documentation: https://github.com/shadowrider/Backbone.Complety.
  * Depends on Backbone: https://github.com/documentcloud/backbone.
  * Depends on Zepto or jQuery: http://zeptojs.com/.
@@ -58,6 +58,7 @@
       this.targetContainer = $(options.targetContainer);
       this.targetContainer.addClass('complity-container');
       this.isArea = options.isArea;
+      this.container = new Backbone.Complety.Container({ attr: this.searchAttr });
       this.render();
     },
 
@@ -75,7 +76,7 @@
       var results = this._checkCollection();
       if(this.container)
         this.container.remove();
-      this.container = new Backbone.Complety.Container({ results: results, attr: this.searchAttr });
+      this.container.updateResults(results);
       this.$el.append(this.container.render().el);
     },
 
@@ -94,7 +95,7 @@
           results.push(model);
       });
       return results;
-    },
+    }
 
   });
 
@@ -103,17 +104,23 @@
     tagName: 'ul',
 
     initialize: function(options) {
-      this.results = options.results;
       this.searchAttr = options.attr;
+      this.resultItems = [];
     },
 
     render: function() {
+      this.$el.html(" ");
       _.each(this.results, function(item) {
         var item = new Backbone.Complety.Item({ content: item.get(this.searchAttr) });
+        this.resultItems.push(item);
         this.$el.append(item.render().el);
       }, this);
 
       return this;
+    },
+
+    updateResults: function(results) {
+      this.results = results;
     }
   });
 

@@ -1,0 +1,8 @@
+.complity-container {
+  position: relative;
+}
+
+.complity-container .autocomplete {
+  position: absolute;
+  z-index: 1234;
+}
