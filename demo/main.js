@@ -1,24 +1,31 @@
 require.config({
   paths: {
+    'use':              'js/libs/use',
     // 3rd party dependencies
-    "jquery":           'libs/zepto',
-    "backbone":         'libs/backbone',
-    "underscore":       'libs/underscore',
+    'jquery':           'js/libs/zepto-wrapper',
+    'underscore':       'js/libs/underscore',
+    'backbone':         'js/libs/backbone',
 
     // Plugin
-    "backbone-plugins": 'libs/backbone-plugins',
-    "app":              'js'
+    'backbone-plugins': 'js/libs/backbone-plugins',
+    'app':              'js/app'
+  },
+  use: {
+    "backbone-plugins/backbone.complety": {
+      deps: ["backbone"],
+      attach: function(Backbone) {
+        return Backbone;
+      }
+    }
   }
 });
 
 require([
-  'js/app',
-  'backbone-plugins/backbone.complety'
+  'app'
+  ,'jquery'
 ],
   function(App) {
-    "use strict";
 
-    // create an instance of the playground app and render it which should start the app
     var app = new App(); // App self-renders
 
-  });
+});

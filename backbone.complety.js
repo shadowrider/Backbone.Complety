@@ -15,13 +15,13 @@
    **/
   var _, Backbone, $, exports;
   if ( typeof window === 'undefined' ) {
-    _ = require( 'underscore' );
-    Backbone = require( 'backbone' );
+    _ = require('underscore');
+    Backbone = require('backbone');
     $ = require('jquery');
     exports = module.exports = Backbone;
   }
   else {
-    var _ = window._;
+    _ = window._;
     Backbone = window.Backbone;
     $ = window.jquery;
     exports = window;
@@ -47,6 +47,7 @@
     },
 
     initialize: function(options) {
+      console.log("I'm alive");
       this.collection = options.collection;
       this.targetContainer = $(options.targetContainer);
     },
