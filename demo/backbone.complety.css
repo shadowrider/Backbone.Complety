@@ -3,6 +3,21 @@
 }
 
 .complity-container .autocomplete {
+  background: #FFF;
+  border: 1px solid #DDD;
+  padding-left: 15px;
   position: absolute;
+  margin: 0;
   z-index: 1234;
+}
+
+.complity-container .autocomplete li {
+  margin: 0;
+  text-align: center;
+  padding: 5px 0;
+  vertical-align: middle;
+}
+
+.complity-container .autocomplete li.selected {
+  background: #aeffee;
 }

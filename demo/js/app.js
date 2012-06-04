@@ -16,6 +16,8 @@ define(function(require, exports, module) {
 
   var gradeSix = new Classroom();
   gradeSix.add(new Pupil({name: "Jack Black", age: 14}));
+  gradeSix.add(new Pupil({name: "Jack Torton", age: 15}));
+  gradeSix.add(new Pupil({name: "Alice Cooper", age: 14}));
 
   var App = Backbone.View.extend({
 
