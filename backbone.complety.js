@@ -34,17 +34,20 @@
    * Backbone.Complety is a backbone widget that provides autocomplete functionality.
    */
   Backbone.Complety = Backbone.View.extend({
-    className: '',
     tagName: 'div',
+    _isArea : false,
 
     close: function() {
       this._$targetContainer.off();
+      this._closeComplety();
+      this._container.unbind();
       this.remove();
       this.unbind();
     },
 
     events: {
-      'keyup .field': '_keyup'
+      'click .field':    '_renderComplety',
+      'keyup .field':    '_keyup'
     },
 
     initialize: function(options) {
@@ -57,7 +60,10 @@
       }
       this._$targetContainer = $(options.targetContainer);
       this._$targetContainer.addClass('complity-container');
-      this.isArea = options.isArea;
+      this._isArea = options.isArea;
+      if(this._isArea) {
+        this.$el.addClass('textarea');
+      }
       this._container = new Backbone.Complety.Container({ attr: this.searchAttr });
       this._container.on('setSelected', this._setSelected, this);
       this.render();
@@ -65,30 +71,32 @@
 
     render: function() {
       var inputTag = '<input type="text" class="field" >';
-      if(this.isArea) {
+      if(this._isArea) {
         inputTag = '<textarea rows="10" cols="35" class="field"></textarea>';
       }
       this.$el.html(inputTag);
+      this.$('.field').on('blur', this._closeComplety);
       this._$targetContainer.append(this.el);
-//      if(this.isArea) {
-//        this._createAreaDiv();
-//      }
 
       return this;
+    },
+
+    _closeComplety: function() {
+      this._container.remove();
     },
 
     _keyup: function(event) {
       event.preventDefault();
       //Enter
       if(event.keyCode === 13 || event.keyCode === 9) {
-        this._container.remove();
+        this._closeComplety();
         this._updateInput();
         return false;
       }
       //ESC
       if (event.keyCode === 27) {
         this._selected = null;
-        this._container.remove();
+        this._closeComplety();
         return false;
       }
       //DOWN
@@ -104,7 +112,7 @@
         return false;
       } else {
         this._renderComplety();
-        if(this.isArea) {
+        if(this._isArea) {
           this._wrapWords(event);
         }
       }
@@ -138,7 +146,7 @@
       if(!searchStr) {
         return results;
       }
-      if(searchStr.length > 2) {
+      if(searchStr.length > 0) {
         this.collection.each(function(model) {
           var value = model.get(self.searchAttr);
           if ((value.indexOf(searchStr) !== -1 && value !== searchStr) ||
@@ -223,7 +231,7 @@
     tagName: 'li',
 
     events: {
-      'mouseover':  'select',
+      'mouseover':  '_selectOnHover',
       'mouseleave': 'deselect',
       'click':      '_setItem'
     },
@@ -238,8 +246,12 @@
       return this;
     },
 
-    select: function() {
+    _selectOnHover: function() {
       this.trigger('deselectItems');
+      this.select();
+    },
+
+    select: function() {
       this.$el.addClass('selected');
     },
 

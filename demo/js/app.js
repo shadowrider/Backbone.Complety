@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         targetContainer: '.input-complete',
         searchAttr: "name"
       });
-      var complety = new Backbone.Complety({
+      var completyArea = new Backbone.Complety({
         collection: gradeSix,
         targetContainer: '.area-complete',
         isArea: true,

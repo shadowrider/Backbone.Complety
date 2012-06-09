@@ -2,22 +2,72 @@
   position: relative;
 }
 
+input.field {
+  height: 30px;
+  padding: 5px 6px;
+  width: 240px;
+
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+textarea.field {
+  height: 120px;
+  padding: 5px 6px;
+  resize: none;
+  width: 300px;
+
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+input.field:focus, textarea.field:focus {
+  border: 1px solid #757ff4;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+input.field, textarea.field, .complity-container .autocomplete li {
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
 .complity-container .autocomplete {
   background: #FFF;
   border: 1px solid #DDD;
-  padding-left: 15px;
+  list-style: none inside;
+  padding-left: 0;
   position: absolute;
   margin: 0;
   z-index: 1234;
 }
 
 .complity-container .autocomplete li {
+  cursor: pointer;
   margin: 0;
-  text-align: center;
-  padding: 5px 0;
-  vertical-align: middle;
+  line-height: 15px;
+  text-align: left;
+  padding: 5px 6px;
+  width: 238px;
+
+          box-sizing: border-box;
+     -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 .complity-container .autocomplete li.selected {
-  background: #aeffee;
+  color: white;
+  background: #c3d9ff; /* Old browsers */
+  background: -moz-linear-gradient(top,  #c3d9ff 0%, #b1c8ef 41%, #98b0d9 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c3d9ff), color-stop(41%,#b1c8ef), color-stop(100%,#98b0d9)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #c3d9ff 0%,#b1c8ef 41%,#98b0d9 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #c3d9ff 0%,#b1c8ef 41%,#98b0d9 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #c3d9ff 0%,#b1c8ef 41%,#98b0d9 100%); /* IE10+ */
+  background: linear-gradient(top,  #c3d9ff 0%,#b1c8ef 41%,#98b0d9 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c3d9ff', endColorstr='#98b0d9',GradientType=0 ); /* IE6-9 */
+}
+
+.textarea .autocomplete li {
+  width: 298px;
 }
