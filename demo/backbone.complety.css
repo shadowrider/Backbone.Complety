@@ -1,4 +1,4 @@
-.complity-container {
+.complety-container {
   position: relative;
 }
 
@@ -33,7 +33,7 @@ input.field, textarea.field, .complity-container .autocomplete li {
   font-size: 14px;
 }
 
-.complity-container .autocomplete {
+.complety-container .autocomplete {
   background: #FFF;
   border: 1px solid #DDD;
   list-style: none inside;
@@ -43,7 +43,7 @@ input.field, textarea.field, .complity-container .autocomplete li {
   z-index: 1234;
 }
 
-.complity-container .autocomplete li {
+.complety-container .autocomplete li {
   cursor: pointer;
   margin: 0;
   line-height: 15px;
@@ -56,7 +56,7 @@ input.field, textarea.field, .complity-container .autocomplete li {
   -webkit-box-sizing: border-box;
 }
 
-.complity-container .autocomplete li.selected {
+.complety-container .autocomplete li.selected {
   color: white;
   background: #c3d9ff; /* Old browsers */
   background: -moz-linear-gradient(top,  #c3d9ff 0%, #b1c8ef 41%, #98b0d9 100%); /* FF3.6+ */
@@ -68,6 +68,21 @@ input.field, textarea.field, .complity-container .autocomplete li {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c3d9ff', endColorstr='#98b0d9',GradientType=0 ); /* IE6-9 */
 }
 
+.textarea .autocomplete {
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
 .textarea .autocomplete li {
   width: 298px;
+}
+
+.textarea .autocomplete li:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.textarea .autocomplete li:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }

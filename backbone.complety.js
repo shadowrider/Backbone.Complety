@@ -34,6 +34,7 @@
    * Backbone.Complety is a backbone widget that provides autocomplete functionality.
    */
   Backbone.Complety = Backbone.View.extend({
+    className: 'complety-container',
     tagName: 'div',
     _isArea : false,
     _trigger: '@',
@@ -61,7 +62,6 @@
         this.ignoreCase = true;
       }
       this._$targetContainer = $(options.targetContainer);
-      this._$targetContainer.addClass('complity-container');
       this._isArea = options.isArea;
       if(this._isArea) {
         this.$el.addClass('textarea');
@@ -79,6 +79,7 @@
       this.$el.html(inputTag);
       this._$textInput = this.$('.field');
       this._$textInput.on('blur', this._closeComplety);
+      this._$textInput.on('keydown',this._keydown);
       this._$targetContainer.append(this.el);
 
       return this;
@@ -86,6 +87,21 @@
 
     _closeComplety: function() {
       this._container.remove();
+    },
+
+    _keydown: function(event) {
+      if( this._container.isRendered ){
+        switch(event.keyCode){
+          case 13:
+          case 40:
+          case 38:
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            return false;
+          case 27:
+            this._container.remove();
+        }
+      }
     },
 
     _keyup: function(event) {
@@ -130,11 +146,14 @@
       if(!this._isArea) {
         this._$textInput.val(this._selected.get(this.searchAttr));
       } else {
-        var content = this._$textInput.val().replace('\n', '');
-        var end = content.substring(this._caretPosition.end, content.length);
-        var start = content.substring(0, this._caretPosition.start);
+        this._caretPosition = this.getInputSelection(this._$textInput[0]);
+
+        var content = this._$textInput.val().replace('\n', ''),
+          end = content.substring(this._caretPosition.end, content.length),
+          start = content.substring(0, this._caretPosition.start);
+
         start = start.substring(0, start.lastIndexOf(this._trigger));
-        this._$textInput.val(start + this._trigger + this._selected.get(this.searchAttr) + " " + end);
+        this._$textInput.val(start + this._trigger + this._selected.get(this.searchAttr) + end);
         this._$textInput[0].selectionStart = this._caretPosition.end + 1 + this._selected.get(this.searchAttr).length;
         this._$textInput[0].selectionEnd = this._caretPosition.end + 1 + this._selected.get(this.searchAttr).length;
         this._$textInput.focus();
@@ -168,11 +187,7 @@
           searchStcLC = "";
         }
       }
-      if(!searchStr) {
-        return results;
-      }
-      if(searchStr.length > 0) {
-        this._caretPosition = this.getInputSelection(this._$textInput[0]);
+      if(searchStr && searchStr.length > 0) {
         this.collection.each(function(model) {
           var value = model.get(self.searchAttr);
           if ((value.indexOf(searchStr) !== -1 && value !== searchStr) ||
@@ -236,7 +251,7 @@
   Backbone.Complety.Container = Backbone.View.extend({
     className: 'autocomplete',
     tagName: 'ul',
-    _isRendered: false,
+    isRendered: false,
 
     initialize: function(options) {
       this.searchAttr = options.attr;
@@ -254,12 +269,12 @@
         this.$el.append(completyItem.render().el);
       }, this);
 
-      this._isRendered = true;
+      this.isRendered = true;
       return this;
     },
 
     remove: function() {
-      this._isRendered = false;
+      this.isRendered = false;
       Backbone.View.prototype.remove.call(this);
     },
 
