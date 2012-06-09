@@ -148,7 +148,7 @@
       } else {
         this._caretPosition = this.getInputSelection(this._$textInput[0]);
 
-        var content = this._$textInput.val().replace('\n', ''),
+        var content = this._$textInput.val(),
           end = content.substring(this._caretPosition.end, content.length),
           start = content.substring(0, this._caretPosition.start);
 
