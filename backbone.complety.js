@@ -36,6 +36,8 @@
   Backbone.Complety = Backbone.View.extend({
     tagName: 'div',
     _isArea : false,
+    _trigger: '@',
+    _caretPosition: 0,
 
     close: function() {
       this._$targetContainer.off();
@@ -75,7 +77,8 @@
         inputTag = '<textarea rows="10" cols="35" class="field"></textarea>';
       }
       this.$el.html(inputTag);
-      this.$('.field').on('blur', this._closeComplety);
+      this._$textInput = this.$('.field');
+      this._$textInput.on('blur', this._closeComplety);
       this._$targetContainer.append(this.el);
 
       return this;
@@ -86,35 +89,35 @@
     },
 
     _keyup: function(event) {
-      event.preventDefault();
       //Enter
       if(event.keyCode === 13 || event.keyCode === 9) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
         this._closeComplety();
         this._updateInput();
         return false;
       }
       //ESC
       if (event.keyCode === 27) {
-        this._selected = null;
-        this._closeComplety();
+        event.stopImmediatePropagation();
+        event.preventDefault();
         return false;
       }
       //DOWN
       if (event.keyCode === 40) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
         this._selected = this._container.selectLowerItem();
-        this._updateInput();
         return false;
       }
       //UP
       if (event.keyCode === 38) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
         this._selected = this._container.selectHigherItem();
-        this._updateInput();
         return false;
       } else {
         this._renderComplety();
-        if(this._isArea) {
-          this._wrapWords(event);
-        }
       }
     },
 
@@ -124,7 +127,18 @@
     },
 
     _updateInput: function() {
-      this.$('.field').val(this._selected.get(this.searchAttr));
+      if(!this._isArea) {
+        this._$textInput.val(this._selected.get(this.searchAttr));
+      } else {
+        var content = this._$textInput.val().replace('\n', '');
+        var end = content.substring(this._caretPosition.end, content.length);
+        var start = content.substring(0, this._caretPosition.start);
+        start = start.substring(0, start.lastIndexOf(this._trigger));
+        this._$textInput.val(start + this._trigger + this._selected.get(this.searchAttr) + " " + end);
+        this._$textInput[0].selectionStart = this._caretPosition.end + 1 + this._selected.get(this.searchAttr).length;
+        this._$textInput[0].selectionEnd = this._caretPosition.end + 1 + this._selected.get(this.searchAttr).length;
+        this._$textInput.focus();
+      }
     },
 
     _renderComplety: function() {
@@ -140,13 +154,25 @@
 
     _checkCollection: function() {
       var self = this,
-        searchStr = this.$('.field').val().trim(),
+        searchStr = this._$textInput.val().trim(),
         searchStcLC = searchStr.toLowerCase(),
         results = [];
+      if(this._isArea) {
+        var content = searchStr.substring(0, this.getInputSelection(this._$textInput[0]).start);
+        searchStr = content.substring(content.lastIndexOf(this._trigger), content.length).split(' ');
+        if(content.lastIndexOf(this._trigger) > -1 && searchStr.length < 2) {
+          searchStr = searchStr[0].substring(1, searchStr[0].length);
+          searchStcLC = searchStr.toLowerCase();
+        } else {
+          searchStr = "";
+          searchStcLC = "";
+        }
+      }
       if(!searchStr) {
         return results;
       }
       if(searchStr.length > 0) {
+        this._caretPosition = this.getInputSelection(this._$textInput[0]);
         this.collection.each(function(model) {
           var value = model.get(self.searchAttr);
           if ((value.indexOf(searchStr) !== -1 && value !== searchStr) ||
@@ -156,13 +182,61 @@
         });
       }
       return results;
+    },
+
+    getInputSelection: function(el) {
+    var start = 0, end = 0, normalizedValue, range,
+      textInputRange, len, endRange;
+
+    if (typeof el.selectionStart === "number" && typeof el.selectionEnd === "number") {
+      start = el.selectionStart;
+      end = el.selectionEnd;
+    } else {
+      range = document.selection.createRange();
+
+      if (range && range.parentElement() === el) {
+        len = el.value.length;
+        normalizedValue = el.value.replace(/\r\n/g, "\n");
+
+        // Create a working TextRange that lives only in the input
+        textInputRange = el.createTextRange();
+        textInputRange.moveToBookmark(range.getBookmark());
+
+        // Check if the start and end of the selection are at the very end
+        // of the input, since moveStart/moveEnd doesn't return what we want
+        // in those cases
+        endRange = el.createTextRange();
+        endRange.collapse(false);
+
+        if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+          start = end = len;
+        } else {
+          start = -textInputRange.moveStart("character", -len);
+          start += normalizedValue.slice(0, start).split("\n").length - 1;
+
+          if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1) {
+            end = len;
+          } else {
+            end = -textInputRange.moveEnd("character", -len);
+            end += normalizedValue.slice(0, end).split("\n").length - 1;
+          }
+        }
+      }
     }
 
-  });
+    return {
+      start: start,
+      end: end
+    };
+  }
+
+
+});
 
   Backbone.Complety.Container = Backbone.View.extend({
     className: 'autocomplete',
     tagName: 'ul',
+    _isRendered: false,
 
     initialize: function(options) {
       this.searchAttr = options.attr;
@@ -180,10 +254,17 @@
         this.$el.append(completyItem.render().el);
       }, this);
 
+      this._isRendered = true;
       return this;
     },
 
+    remove: function() {
+      this._isRendered = false;
+      Backbone.View.prototype.remove.call(this);
+    },
+
     _updateResults: function(results) {
+      this._listPointer = -1;
       this.results = results;
     },
 
