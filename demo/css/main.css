@@ -1,0 +1,98 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+h2, h3, h4, h5, h6 {
+  font-family: Arial, serif;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+h1 {
+  color: #222;
+  font-family: Helvetica, sans-serif;
+  font-size: 64px;
+  font-weight: bold;
+  letter-spacing: -1px;
+  text-align: center;
+}
+h2 {
+  display: table-row;
+  color: #111;
+  font-family: Helvetica, sans-serif;
+  font-size: 26px;
+}
+h3 {
+  color: #111;
+  font-size: 18px;
+}
+
+.container {
+  border-left: 1px solid #AAA;
+  border-right: 1px solid #AAA;
+  -webkit-box-shadow:  0px 1px 4px 1px rgba(0, 0, 0, 0.2);
+  box-shadow:  0px 1px 4px 1px rgba(0, 0, 0, 0.2);
+  height: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  width: 960px;
+}
+
+.row {
+  display: table;
+  padding: 20px;
+  width: 100%;
+}
+
+.half {
+  display: table-cell;
+  padding: 10px;
+  width: 50%;
+}
+
+.half .row {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 0;
+  width: 100%;
+}

@@ -33,6 +33,32 @@ define(function(require, exports, module) {
         isArea: true,
         searchAttr: "name"
       });
+      var multiComplety = new Backbone.Complety({
+        collection: gradeSix,
+        targetContainer: '.multi-input-complete',
+        isMultiple: true,
+        searchAttr: "name"
+      });
+      var multiCompletyArea = new Backbone.Complety({
+        collection: gradeSix,
+        targetContainer: '.multi-area-complete',
+        isArea: true,
+        isMultiple: true,
+        searchAttr: "name"
+      });
+      var customComplety = new Backbone.Complety({
+        collection: gradeSix,
+        targetContainer: '.custom-input-complete',
+        isMultiple: true,
+        searchAttr: "name"
+      });
+      var customCompletyArea = new Backbone.Complety({
+        collection: gradeSix,
+        targetContainer: '.custom-area-complete',
+        isArea: true,
+        isMultiple: true,
+        searchAttr: "name"
+      });
     },
 
     render: function(options) {

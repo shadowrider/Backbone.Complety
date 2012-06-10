@@ -37,6 +37,8 @@
     className: 'complety-container',
     tagName: 'div',
     _isArea : false,
+    _isMultiple: false,
+    _ignoreCase: true,
     _trigger: '@',
     _caretPosition: 0,
 
@@ -55,17 +57,22 @@
 
     initialize: function(options) {
       _.bindAll(this);
+
       this.collection = options.collection;
       this.searchAttr = options.searchAttr;
-      this.ignoreCase = false;
-      if(!options.ignoreCase) {
-        this.ignoreCase = true;
-      }
       this._$targetContainer = $(options.targetContainer);
-      this._isArea = options.isArea;
-      if(this._isArea) {
+
+      this._ignoreCase = options.ignoreCase;
+
+      if(options.isArea) {
+        this._isArea = true;
         this.$el.addClass('textarea');
       }
+
+      if(options.isMultiple) {
+        this._isMultiple = true;
+      }
+
       this._container = new Backbone.Complety.Container({ attr: this.searchAttr });
       this._container.on('setSelected', this._setSelected, this);
       this.render();
@@ -143,7 +150,7 @@
     },
 
     _updateInput: function() {
-      if(!this._isArea) {
+      if(!this._isMultiple) {
         this._$textInput.val(this._selected.get(this.searchAttr));
       } else {
         this._caretPosition = this.getInputSelection(this._$textInput[0]);
@@ -176,7 +183,7 @@
         searchStr = this._$textInput.val().trim(),
         searchStcLC = searchStr.toLowerCase(),
         results = [];
-      if(this._isArea) {
+      if(this._isMultiple) {
         var content = searchStr.substring(0, this.getInputSelection(this._$textInput[0]).start);
         searchStr = content.substring(content.lastIndexOf(this._trigger), content.length).split(' ');
         if(content.lastIndexOf(this._trigger) > -1 && searchStr.length < 2) {
@@ -187,15 +194,19 @@
           searchStcLC = "";
         }
       }
+      console.log(searchStr);
+      console.log(this._ignoreCase);
       if(searchStr && searchStr.length > 0) {
         this.collection.each(function(model) {
           var value = model.get(self.searchAttr);
           if ((value.indexOf(searchStr) !== -1 && value !== searchStr) ||
-            (self.ignoreCase && value.toLowerCase().indexOf(searchStcLC) !== -1 && value.toLowerCase() !== searchStcLC)) {
+            (self._ignoreCase && value.toLowerCase().indexOf(searchStcLC) !== -1 && value.toLowerCase() !== searchStcLC)) {
+
             results.push(model);
           }
         });
       }
+      console.log(results);
       return results;
     },
 
