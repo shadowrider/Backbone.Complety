@@ -6,13 +6,19 @@
   <link rel="stylesheet" href="css/normalize.css" type="text/css" />
   <link rel="stylesheet" href="backbone.complety.css" type="text/css" />
   <link rel="stylesheet" href="css/main.css" type="text/css" />
+  <link href="js/libs/google-code-prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <link href="js/libs/google-code-prettify/sunburst.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="js/libs/google-code-prettify/prettify.js"></script>
   <script data-main="main" src="js/libs/require.js"></script>
 </head>
-<body>
+<body onload="prettyPrint()">
   <div class="container">
     <h1>Backbone Complety</h1>
+    <p class="ad">Simple Backbone based solution for long and boring select boxes. It supports searching, multiple selection and
+      custom templates for search results.</p>
+    <h2>Basic Autocomplete</h2>
+    <hr>
     <div class="row">
-      <h2>Basic Autocomplete</h2>
       <div class="half">
         <div class="row">
           <h3>Autocomplete for Text Input </h3>
@@ -26,16 +32,24 @@
         </div>
       </div>
       <div class="half">
-        <div>
-
-        </div>
-        <div>
-
-        </div>
+        <pre class="prettyprint prettyprinted linenums lang-js">
+var complety = new Backbone.Complety({
+  collection: gradeSix,
+  targetContainer: '.input-complete',
+  searchAttr: "name"
+});</pre>
+        <pre class="prettyprint prettyprinted linenums lang-js">
+var completyArea = new Backbone.Complety({
+  collection: gradeSix,
+  targetContainer: '.area-complete',
+  isArea: true,
+  searchAttr: "name"
+});</pre>
       </div>
     </div>
+    <h2>Multiple Autocomplete</h2>
+    <hr>
     <div class="row">
-      <h2>Multiple Autocomplete</h2>
       <div class="half">
         <div class="row">
           <h3>Multiple Autocomplete for Text Input </h3>
@@ -49,16 +63,26 @@
         </div>
       </div>
       <div class="half">
-        <div>
-
-        </div>
-        <div>
-
-        </div>
+        <pre class="prettyprint prettyprinted linenums lang-js">
+var complety = new Backbone.Complety({
+  collection: gradeSix,
+  targetContainer: '.input-complete',
+  isMultiple: true,
+  searchAttr: "name"
+});</pre>
+        <pre class="prettyprint prettyprinted linenums lang-js">
+var completyArea = new Backbone.Complety({
+  collection: gradeSix,
+  targetContainer: '.area-complete',
+  isArea: true,
+  isMultiple: true,
+  searchAttr: "name"
+});</pre>
       </div>
     </div>
+    <h2>Custom Template for Autocomplete</h2>
+    <hr>
     <div class="row">
-      <h2>Custom Template for Autocomplete</h2>
       <div class="half">
         <div class="row">
           <h3>Multiple Autocomplete for Text Input </h3>
@@ -72,12 +96,24 @@
         </div>
       </div>
       <div class="half">
-        <div>
+        <pre class="prettyprint prettyprinted linenums lang-js">
+var complety = new Backbone.Complety({
+  collection: gradeSix,
+  targetContainer: '.input-complete',
+  searchAttr: "name",
+  template: {
+      template: Template,
+      tmpltData: {
 
-        </div>
-        <div>
-
-        </div>
+      }
+});</pre>
+        <pre class="prettyprint prettyprinted linenums lang-js">
+var completyArea = new Backbone.Complety({
+  collection: gradeSix,
+  targetContainer: '.area-complete',
+  isArea: true,
+  searchAttr: "name"
+});</pre>
       </div>
     </div>
   </div>

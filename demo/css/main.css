@@ -1,3 +1,7 @@
+body{
+ background: #EEE;
+}
+
 h2, h3, h4, h5, h6 {
   font-family: Arial, serif;
   font-weight: bold;
@@ -5,12 +9,14 @@ h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  color: #222;
+  color: #444;
   font-family: Helvetica, sans-serif;
-  font-size: 64px;
+  font-size: 81px;
   font-weight: bold;
   letter-spacing: -1px;
+  margin-bottom: 2px;
   text-align: center;
+  text-shadow: #DDD 0 1px 2px;
 }
 
 h2 {
@@ -18,14 +24,28 @@ h2 {
   color: #111;
   font-family: Helvetica, sans-serif;
   font-size: 26px;
+  font-weight: lighter;
+  text-shadow: #DDD 0 1px 2px;
 }
 
 h3 {
   color: #111;
   font-size: 18px;
+  font-weight: lighter;
+  margin-top: 0;
+  text-shadow: #DDD 0 1px 2px;
+}
+
+hr {
+  color: #AAA;
+}
+
+pre {
+  font-size: 12px;
 }
 
 .container {
+  background: white;
   border-left: 1px solid #AAA;
   border-right: 1px solid #AAA;
   -webkit-box-shadow:  0px 1px 4px 1px rgba(0, 0, 0, 0.2);
@@ -36,9 +56,23 @@ h3 {
   width: 960px;
 }
 
+.ad {
+  color: #222;
+  font-family: Futura, sans-serif;
+  font-size: 26px;
+  font-weight: 100;
+  letter-spacing: -1px;
+  margin-top: 5px;
+  text-align: center;
+  text-shadow: #DDD 0 1px 1px;
+}
+
 .row {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   display: table;
-  padding: 20px;
+  margin-bottom: 40px;
+  padding: 10px 20px 20px 20px;
   width: 100%;
 }
 
@@ -50,7 +84,6 @@ h3 {
 
 .half .row {
   display: block;
-  margin-top: 10px;
   margin-bottom: 20px;
   padding: 0;
   width: 100%;
