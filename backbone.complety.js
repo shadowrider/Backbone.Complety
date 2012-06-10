@@ -23,9 +23,9 @@
   else {
     _ = window._;
     Backbone = window.Backbone;
-    $ = window.jQuery;
-    if(window.Zepto) {
-      $ = window.Zepto;
+    $ = window.Zepto;
+    if(window.jQuery) {
+      $ = window.jQuery;
     }
     exports = window;
   }
@@ -36,23 +36,23 @@
   Backbone.Complety = Backbone.View.extend({
     className: 'complety-container',
     tagName: 'div',
-    _isArea : false,
-    _isMultiple: false,
-    _ignoreCase: true,
-    _trigger: '@',
-    _caretPosition: 0,
+    isArea : false,
+    isMultiple: false,
+    ignoreCase: true,
+    trigger: '@',
+    caretPosition: 0,
 
     close: function() {
-      this._$targetContainer.off();
-      this._closeComplety();
-      this._container.unbind();
+      this.targetContainer.off();
+      this.closeComplety();
+      this.container.unbind();
       this.remove();
       this.unbind();
     },
 
     events: {
-      'click .field':    '_renderComplety',
-      'keyup .field':    '_keyup'
+      'click .field':    'renderComplety',
+      'keyup .field':    'keyup'
     },
 
     initialize: function(options) {
@@ -60,44 +60,44 @@
 
       this.collection = options.collection;
       this.searchAttr = options.searchAttr;
-      this._$targetContainer = $(options.targetContainer);
+      this.targetContainer = $(options.targetContainer);
 
-      this._ignoreCase = options.ignoreCase;
+      this.ignoreCase = options.ignoreCase;
 
       if(options.isArea) {
-        this._isArea = true;
+        this.isArea = true;
         this.$el.addClass('textarea');
       }
 
       if(options.isMultiple) {
-        this._isMultiple = true;
+        this.isMultiple = true;
       }
 
-      this._container = new Backbone.Complety.Container({ attr: this.searchAttr });
-      this._container.on('setSelected', this._setSelected, this);
+      this.container = new Backbone.Complety.Container({ attr: this.searchAttr });
+      this.container.on('setSelected', this.setSelected, this);
       this.render();
     },
 
     render: function() {
       var inputTag = '<input type="text" class="field" >';
-      if(this._isArea) {
+      if(this.isArea) {
         inputTag = '<textarea rows="10" cols="35" class="field"></textarea>';
       }
       this.$el.html(inputTag);
-      this._$textInput = this.$('.field');
-      this._$textInput.on('blur', this._closeComplety);
-      this._$textInput.on('keydown',this._keydown);
-      this._$targetContainer.append(this.el);
+      this.textInput = this.$('.field');
+      this.textInput.on('blur', this.closeComplety);
+      this.textInput.on('keydown',this.keydown);
+      this.targetContainer.append(this.el);
 
       return this;
     },
 
-    _closeComplety: function() {
-      this._container.remove();
+    closeComplety: function() {
+      this.container.remove();
     },
 
-    _keydown: function(event) {
-      if( this._container.isRendered ){
+    keydown: function(event) {
+      if( this.container.isRendered ){
         switch(event.keyCode){
           case 13:
           case 40:
@@ -106,18 +106,18 @@
             event.preventDefault();
             return false;
           case 27:
-            this._container.remove();
+            this.closeComplety();
         }
       }
     },
 
-    _keyup: function(event) {
+    keyup: function(event) {
       //Enter
       if(event.keyCode === 13 || event.keyCode === 9) {
         event.stopImmediatePropagation();
         event.preventDefault();
-        this._closeComplety();
-        this._updateInput();
+        this.closeComplety();
+        this.updateInput();
         return false;
       }
       //ESC
@@ -130,63 +130,63 @@
       if (event.keyCode === 40) {
         event.stopImmediatePropagation();
         event.preventDefault();
-        this._selected = this._container.selectLowerItem();
+        this._selected = this.container.selectLowerItem();
         return false;
       }
       //UP
       if (event.keyCode === 38) {
         event.stopImmediatePropagation();
         event.preventDefault();
-        this._selected = this._container.selectHigherItem();
+        this._selected = this.container.selectHigherItem();
         return false;
       } else {
-        this._renderComplety();
+        this.renderComplety();
       }
     },
 
-    _setSelected: function(selected) {
+    setSelected: function(selected) {
       this._selected = selected;
-      this._updateInput();
+      this.updateInput();
     },
 
-    _updateInput: function() {
-      if(!this._isMultiple) {
-        this._$textInput.val(this._selected.get(this.searchAttr));
+    updateInput: function() {
+      if(!this.isMultiple) {
+        this.textInput.val(this._selected.get(this.searchAttr));
       } else {
-        this._caretPosition = this.getInputSelection(this._$textInput[0]);
+        this.caretPosition = this.getInputSelection(this.textInput[0]);
 
-        var content = this._$textInput.val(),
-          end = content.substring(this._caretPosition.end, content.length),
-          start = content.substring(0, this._caretPosition.start);
+        var content = this.textInput.val(),
+          end = content.substring(this.caretPosition.end, content.length),
+          start = content.substring(0, this.caretPosition.start);
 
-        start = start.substring(0, start.lastIndexOf(this._trigger));
-        this._$textInput.val(start + this._trigger + this._selected.get(this.searchAttr) + end);
-        this._$textInput[0].selectionStart = this._caretPosition.end + 1 + this._selected.get(this.searchAttr).length;
-        this._$textInput[0].selectionEnd = this._caretPosition.end + 1 + this._selected.get(this.searchAttr).length;
-        this._$textInput.focus();
+        start = start.substring(0, start.lastIndexOf(this.trigger));
+        this.textInput.val(start + this.trigger + this._selected.get(this.searchAttr) + end);
+        this.textInput[0].selectionStart = this.caretPosition.end + 1 + this._selected.get(this.searchAttr).length;
+        this.textInput[0].selectionEnd = this.caretPosition.end + 1 + this._selected.get(this.searchAttr).length;
+        this.textInput.focus();
       }
     },
 
-    _renderComplety: function() {
-      var results = this._checkCollection();
-      if(this._container) {
-        this._container.remove();
+    renderComplety: function() {
+      var results = this.checkCollection();
+      if(this.container) {
+        this.closeComplety();
       }
       if(!_.isEmpty(results)) {
-        this._container._updateResults(results);
-        this.$el.append(this._container.render().el);
+        this.container.updateResults(results);
+        this.$el.append(this.container.render().el);
       }
     },
 
-    _checkCollection: function() {
+    checkCollection: function() {
       var self = this,
-        searchStr = this._$textInput.val().trim(),
+        searchStr = this.textInput.val().trim(),
         searchStcLC = searchStr.toLowerCase(),
         results = [];
-      if(this._isMultiple) {
-        var content = searchStr.substring(0, this.getInputSelection(this._$textInput[0]).start);
-        searchStr = content.substring(content.lastIndexOf(this._trigger), content.length).split(' ');
-        if(content.lastIndexOf(this._trigger) > -1 && searchStr.length < 2) {
+      if(this.isMultiple) {
+        var content = searchStr.substring(0, this.getInputSelection(this.textInput[0]).start);
+        searchStr = content.substring(content.lastIndexOf(this.trigger), content.length).split(' ');
+        if(content.lastIndexOf(this.trigger) > -1 && searchStr.length < 2) {
           searchStr = searchStr[0].substring(1, searchStr[0].length);
           searchStcLC = searchStr.toLowerCase();
         } else {
@@ -194,19 +194,16 @@
           searchStcLC = "";
         }
       }
-      console.log(searchStr);
-      console.log(this._ignoreCase);
       if(searchStr && searchStr.length > 0) {
         this.collection.each(function(model) {
           var value = model.get(self.searchAttr);
           if ((value.indexOf(searchStr) !== -1 && value !== searchStr) ||
-            (self._ignoreCase && value.toLowerCase().indexOf(searchStcLC) !== -1 && value.toLowerCase() !== searchStcLC)) {
+            (self.ignoreCase && value.toLowerCase().indexOf(searchStcLC) !== -1 && value.toLowerCase() !== searchStcLC)) {
 
             results.push(model);
           }
         });
       }
-      console.log(results);
       return results;
     },
 
@@ -266,7 +263,7 @@
 
     initialize: function(options) {
       this.searchAttr = options.attr;
-      this._listPointer = -1;
+      this.listPointer = -1;
     },
 
     render: function() {
@@ -274,8 +271,8 @@
       this.$el.html(" ");
       _.each(this.results, function(item) {
         var completyItem = new Backbone.Complety.Item({ model: item, searchAttr: this.searchAttr });
-        completyItem.on('deselectItems', this._deselectItems, this);
-        completyItem.on('setItem', this._passSelected, this);
+        completyItem.on('deselectItems', this.deselectItems, this);
+        completyItem.on('setItem', this.passSelected, this);
         this.resultItems.push(completyItem);
         this.$el.append(completyItem.render().el);
       }, this);
@@ -289,46 +286,46 @@
       Backbone.View.prototype.remove.call(this);
     },
 
-    _updateResults: function(results) {
-      this._listPointer = -1;
+    updateResults: function(results) {
+      this.listPointer = -1;
       this.results = results;
     },
 
-    _passSelected: function(selected) {
+    passSelected: function(selected) {
       this.trigger('setSelected', selected);
       this.remove();
     },
 
     selectLowerItem: function() {
-      this._listPointer++;
-      if(this._listPointer === this.resultItems.length) {
-        this._listPointer = 0;
+      this.listPointer++;
+      if(this.listPointer === this.resultItems.length) {
+        this.listPointer = 0;
       }
-      if(this._listPointer === 0) {
+      if(this.listPointer === 0) {
         this.resultItems[this.resultItems.length-1].deselect();
       } else {
-        this.resultItems[this._listPointer-1].deselect();
+        this.resultItems[this.listPointer-1].deselect();
       }
-      var result = this.resultItems[this._listPointer];
+      var result = this.resultItems[this.listPointer];
       result.select();
       return result.model;
     },
 
     selectHigherItem: function() {
-      this._listPointer--;
-      if(this._listPointer < 0) {
-        this._listPointer = this.resultItems.length-1;
+      this.listPointer--;
+      if(this.listPointer < 0) {
+        this.listPointer = this.resultItems.length-1;
         this.resultItems[0].deselect();
       } else {
-        this.resultItems[this._listPointer+1].deselect();
+        this.resultItems[this.listPointer+1].deselect();
       }
-      var result = this.resultItems[this._listPointer];
+      var result = this.resultItems[this.listPointer];
       result.select();
       return result.model;
     },
 
-    _deselectItems: function() {
-      this._listPointer = -1;
+    deselectItems: function() {
+      this.listPointer = -1;
       _.invoke(this.resultItems, 'deselect');
     }
   });
@@ -338,9 +335,9 @@
     tagName: 'li',
 
     events: {
-      'mouseover':  '_selectOnHover',
+      'mouseover':  'selectOnHover',
       'mouseleave': 'deselect',
-      'click':      '_setItem'
+      'click':      'setItem'
     },
 
     initialize: function(options) {
@@ -353,7 +350,7 @@
       return this;
     },
 
-    _selectOnHover: function() {
+    selectOnHover: function() {
       this.trigger('deselectItems');
       this.select();
     },
@@ -366,7 +363,7 @@
       this.$el.removeClass('selected');
     },
 
-    _setItem: function() {
+    setItem: function() {
       this.trigger('setItem', this.model);
     }
   });

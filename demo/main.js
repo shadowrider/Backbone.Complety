@@ -3,6 +3,7 @@ require.config({
     'use':              'js/libs/use',
     // 3rd party dependencies
     'jquery':           'js/libs/zepto-wrapper',
+    //'jquery':           'js/libs/jquery-wrapper',
     'underscore':       'js/libs/underscore',
     'backbone':         'js/libs/backbone',
 
