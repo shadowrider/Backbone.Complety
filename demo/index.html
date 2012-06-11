@@ -35,7 +35,7 @@
         <pre class="prettyprint prettyprinted linenums lang-js">
 var complety = new Backbone.Complety({
   //search source
-  collection: famousBrands,
+  collection: famousCarBrands,
   //div selector where widget will be rendered
   targetContainer: '.input-complete',
   //attribute of the model where to search
@@ -43,7 +43,7 @@ var complety = new Backbone.Complety({
 });</pre>
         <pre class="prettyprint prettyprinted linenums lang-js">
 var completyArea = new Backbone.Complety({
-  collection: famousBrands,
+  collection: famousCarBrands,
   targetContainer: '.area-complete',
 
   //Set to true if you want textarea to be
@@ -72,14 +72,14 @@ var completyArea = new Backbone.Complety({
       <div class="half">
         <pre class="prettyprint prettyprinted linenums lang-js">
 var complety = new Backbone.Complety({
-  collection: famousBrands,
+  collection: famousCarBrands,
   targetContainer: '.input-complete',
   isMultiple: true,
   searchAttr: "brand"
 });</pre>
         <pre class="prettyprint prettyprinted linenums lang-js">
 var completyArea = new Backbone.Complety({
-  collection: famousBrands,
+  collection: famousCarBrands,
   targetContainer: '.area-complete',
   isArea: true,
   isMultiple: true,
@@ -116,7 +116,7 @@ var complety = new Backbone.Complety({
 });</pre>
         <pre class="prettyprint prettyprinted linenums lang-js">
 var customCompletyArea = new Backbone.Complety({
-  collection: famousBrands,
+  collection: famousCarBrands,
   targetContainer: '.custom-area-complete',
   isArea: true,
   isMultiple: true,
