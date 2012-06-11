@@ -14,7 +14,7 @@
 <body onload="prettyPrint()">
   <div class="container">
     <h1>Backbone Complety</h1>
-    <p class="ad">Simple Backbone based solution for long and boring select boxes. It supports searching, multiple selection and
+    <p class="ad">Simple Backbone based replacement for long and boring select boxes. It supports searching, multiple selection and
       custom templates for search results.</p>
     <h2>Basic Autocomplete</h2>
     <hr>
@@ -34,16 +34,23 @@
       <div class="half">
         <pre class="prettyprint prettyprinted linenums lang-js">
 var complety = new Backbone.Complety({
-  collection: gradeSix,
+  //search source
+  collection: famousBrands,
+  //div selector where widget will be rendered
   targetContainer: '.input-complete',
-  searchAttr: "name"
+  //attribute of the model where to search
+  searchAttr: "brand"
 });</pre>
         <pre class="prettyprint prettyprinted linenums lang-js">
 var completyArea = new Backbone.Complety({
-  collection: gradeSix,
+  collection: famousBrands,
   targetContainer: '.area-complete',
+
+  //Set to true if you want textarea to be
+  //rendered.
   isArea: true,
-  searchAttr: "name"
+
+  searchAttr: "brand"
 });</pre>
       </div>
     </div>
@@ -65,18 +72,18 @@ var completyArea = new Backbone.Complety({
       <div class="half">
         <pre class="prettyprint prettyprinted linenums lang-js">
 var complety = new Backbone.Complety({
-  collection: gradeSix,
+  collection: famousBrands,
   targetContainer: '.input-complete',
   isMultiple: true,
-  searchAttr: "name"
+  searchAttr: "brand"
 });</pre>
         <pre class="prettyprint prettyprinted linenums lang-js">
 var completyArea = new Backbone.Complety({
-  collection: gradeSix,
+  collection: famousBrands,
   targetContainer: '.area-complete',
   isArea: true,
   isMultiple: true,
-  searchAttr: "name"
+  searchAttr: "brand"
 });</pre>
       </div>
     </div>
@@ -98,21 +105,33 @@ var completyArea = new Backbone.Complety({
       <div class="half">
         <pre class="prettyprint prettyprinted linenums lang-js">
 var complety = new Backbone.Complety({
-  collection: gradeSix,
-  targetContainer: '.input-complete',
-  searchAttr: "name",
+  collection: source to look,
+  targetContainer: selector for div,
+  searchAttr: attribute to search,
   template: {
-      template: Template,
-      tmpltData: {
-
-      }
+    template: Template,
+    tmpltData: {
+      keys : model attribute
+    }
 });</pre>
         <pre class="prettyprint prettyprinted linenums lang-js">
-var completyArea = new Backbone.Complety({
-  collection: gradeSix,
-  targetContainer: '.area-complete',
+var customCompletyArea = new Backbone.Complety({
+  collection: famousBrands,
+  targetContainer: '.custom-area-complete',
   isArea: true,
-  searchAttr: "name"
+  isMultiple: true,
+  searchAttr: "brand",
+  ignoreCase: true,
+  Template: {
+    template: '&lt;table&gt;&lt;tr class="trow"&gt;&lt;td&gt;
+            &lt;img height="40" src="<%= img %>"&gt;&lt;/td&gt;
+            &lt;td class="title"&gt;<%= name %>&lt;/td&gt;&lt;/tr&gt;
+            &lt;/table&gt;',
+    values: {
+      name: 'brand',
+      img: 'imgURL'
+    }
+  }
 });</pre>
       </div>
     </div>

@@ -1,5 +1,5 @@
 /**
- * Backbone.complety.js 0.1
+ * Backbone.complety.js 0.2
  * (c) 2012 Myroslav Pomazan
  *
  * Backbone.Complety may be freely distributed under the MIT license.
@@ -141,14 +141,14 @@
       if (event.keyCode === 40) {
         event.stopImmediatePropagation();
         event.preventDefault();
-        this._selected = this.container.selectLowerItem();
+        this.selected = this.container.selectLowerItem();
         return false;
       }
       //UP
       if (event.keyCode === 38) {
         event.stopImmediatePropagation();
         event.preventDefault();
-        this._selected = this.container.selectHigherItem();
+        this.selected = this.container.selectHigherItem();
         return false;
       } else {
         this.renderComplety();
@@ -156,13 +156,13 @@
     },
 
     setSelected: function(selected) {
-      this._selected = selected;
+      this.selected = selected;
       this.updateInput();
     },
 
     updateInput: function() {
       if(!this.isMultiple) {
-        this.textInput.val(this._selected.get(this.searchAttr));
+        this.textInput.val(this.selected.get(this.searchAttr));
       } else {
         this.caretPosition = this.getInputSelection(this.textInput[0]);
 
@@ -171,11 +171,11 @@
           start = content.substring(0, this.caretPosition.start);
 
         start = start.substring(0, start.lastIndexOf(this.trigger));
-        this.textInput.val(start + this.trigger + this._selected.get(this.searchAttr) + end);
-        this.textInput[0].selectionStart = this.caretPosition.end + 1 + this._selected.get(this.searchAttr).length;
-        this.textInput[0].selectionEnd = this.caretPosition.end + 1 + this._selected.get(this.searchAttr).length;
-        this.textInput.focus();
+        this.textInput.val(start + this.trigger + this.selected.get(this.searchAttr) + end);
+        this.textInput[0].selectionStart = this.caretPosition.end + 1 + this.selected.get(this.searchAttr).length;
+        this.textInput[0].selectionEnd = this.caretPosition.end + 1 + this.selected.get(this.searchAttr).length;
       }
+      this.textInput.focus();
     },
 
     renderComplety: function() {
@@ -192,25 +192,24 @@
     checkCollection: function() {
       var self = this,
         searchStr = this.textInput.val().trim(),
-        searchStcLC = searchStr.toLowerCase(),
+        searchStrLC = searchStr.toLowerCase(),
         results = [];
       if(this.isMultiple) {
         var content = searchStr.substring(0, this.getInputSelection(this.textInput[0]).start);
         searchStr = content.substring(content.lastIndexOf(this.trigger), content.length).split(' ');
         if(content.lastIndexOf(this.trigger) > -1 && searchStr.length < 2) {
           searchStr = searchStr[0].substring(1, searchStr[0].length);
-          searchStcLC = searchStr.toLowerCase();
+          searchStrLC = searchStr.toLowerCase();
         } else {
           searchStr = "";
-          searchStcLC = "";
+          searchStrLC = "";
         }
       }
       if(searchStr && searchStr.length > 0) {
         this.collection.each(function(model) {
           var value = model.get(self.searchAttr);
           if ((value.indexOf(searchStr) !== -1 && value !== searchStr) ||
-            (self.ignoreCase && value.toLowerCase().indexOf(searchStcLC) !== -1 && value.toLowerCase() !== searchStcLC)) {
-
+              (self.ignoreCase && value.toLowerCase().indexOf(searchStrLC) !== -1 && value.toLowerCase() !== searchStrLC)) {
             results.push(model);
           }
         });
@@ -219,53 +218,51 @@
     },
 
     getInputSelection: function(el) {
-    var start = 0, end = 0, normalizedValue, range,
-      textInputRange, len, endRange;
+      var start = 0, end = 0, normalizedValue, range,
+        textInputRange, len, endRange;
 
-    if (typeof el.selectionStart === "number" && typeof el.selectionEnd === "number") {
-      start = el.selectionStart;
-      end = el.selectionEnd;
-    } else {
-      range = document.selection.createRange();
+      if (typeof el.selectionStart === "number" && typeof el.selectionEnd === "number") {
+        start = el.selectionStart;
+        end = el.selectionEnd;
+      } else {
+        range = document.selection.createRange();
 
-      if (range && range.parentElement() === el) {
-        len = el.value.length;
-        normalizedValue = el.value.replace(/\r\n/g, "\n");
+        if (range && range.parentElement() === el) {
+          len = el.value.length;
+          normalizedValue = el.value.replace(/\r\n/g, "\n");
 
-        // Create a working TextRange that lives only in the input
-        textInputRange = el.createTextRange();
-        textInputRange.moveToBookmark(range.getBookmark());
+          // Create a working TextRange that lives only in the input
+          textInputRange = el.createTextRange();
+          textInputRange.moveToBookmark(range.getBookmark());
 
-        // Check if the start and end of the selection are at the very end
-        // of the input, since moveStart/moveEnd doesn't return what we want
-        // in those cases
-        endRange = el.createTextRange();
-        endRange.collapse(false);
+          // Check if the start and end of the selection are at the very end
+          // of the input, since moveStart/moveEnd doesn't return what we want
+          // in those cases
+          endRange = el.createTextRange();
+          endRange.collapse(false);
 
-        if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
-          start = end = len;
-        } else {
-          start = -textInputRange.moveStart("character", -len);
-          start += normalizedValue.slice(0, start).split("\n").length - 1;
-
-          if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1) {
-            end = len;
+          if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+            start = end = len;
           } else {
-            end = -textInputRange.moveEnd("character", -len);
-            end += normalizedValue.slice(0, end).split("\n").length - 1;
+            start = -textInputRange.moveStart("character", -len);
+            start += normalizedValue.slice(0, start).split("\n").length - 1;
+
+            if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1) {
+              end = len;
+            } else {
+              end = -textInputRange.moveEnd("character", -len);
+              end += normalizedValue.slice(0, end).split("\n").length - 1;
+            }
           }
         }
       }
+
+      return {
+        start: start,
+        end: end
+      };
     }
-
-    return {
-      start: start,
-      end: end
-    };
-  }
-
-
-});
+  });
 
   Backbone.Complety.Container = Backbone.View.extend({
     className: 'autocomplete',

@@ -88,3 +88,12 @@ pre {
   padding: 0;
   width: 100%;
 }
+
+.trow {
+  height: 40px;
+}
+
+.trow .title {
+  font-size: 15px;
+  padding-left: 15px;
+}

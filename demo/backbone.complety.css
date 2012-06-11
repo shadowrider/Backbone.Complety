@@ -39,7 +39,10 @@ input.field, textarea.field {
   list-style: none inside;
   padding-left: 0;
   position: absolute;
+  max-height: 200px;
   margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
   z-index: 1234;
 }
 
