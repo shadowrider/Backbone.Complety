@@ -73,7 +73,18 @@
         this.isMultiple = true;
       }
 
-      this.container = new Backbone.Complety.Container({ attr: this.searchAttr });
+      var Template;
+      if(options.Template) {
+        Template = options.Template;
+      } else {
+        Template = {
+          template: '<span><%= content %></span>',
+          values: {
+            content: this.searchAttr
+          }
+        };
+      }
+      this.container = new Backbone.Complety.Container({ attr: this.searchAttr, Template: Template });
       this.container.on('setSelected', this.setSelected, this);
       this.render();
     },
@@ -264,13 +275,19 @@
     initialize: function(options) {
       this.searchAttr = options.attr;
       this.listPointer = -1;
+      this.itemTemplate = options.Template;
     },
 
     render: function() {
       this.resultItems = [];
       this.$el.html(" ");
       _.each(this.results, function(item) {
-        var completyItem = new Backbone.Complety.Item({ model: item, searchAttr: this.searchAttr });
+        var completyItem = new Backbone.Complety.Item({
+          template: this.itemTemplate.template,
+          tmpltValues: this.itemTemplate.values,
+          model: item,
+          searchAttr: this.searchAttr
+        });
         completyItem.on('deselectItems', this.deselectItems, this);
         completyItem.on('setItem', this.passSelected, this);
         this.resultItems.push(completyItem);
@@ -342,10 +359,16 @@
 
     initialize: function(options) {
       this.searchAttr = options.searchAttr;
+      this.tmpltValues = options.tmpltValues;
+      this.template = options.template;
     },
 
     render: function() {
-      this.$el.html(_.template('<span><%= content %></span>',{ content: this.model.get(this.searchAttr) }));
+      var content = {};
+      _.each(this.tmpltValues, function(value, key) {
+        content[key] = this.model.get(value);
+      }, this);
+      this.$el.html(_.template(this.template, content));
 
       return this;
     },

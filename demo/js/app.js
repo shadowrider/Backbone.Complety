@@ -50,7 +50,14 @@ define(function(require, exports, module) {
         collection: gradeSix,
         targetContainer: '.custom-input-complete',
         isMultiple: true,
-        searchAttr: "name"
+        searchAttr: "name",
+        Template: {
+          template: '<span><%= name %></span><span> Age: <%= age %></span>',
+          values: {
+            name: 'name',
+            age: 'age'
+          }
+        }
       });
       var customCompletyArea = new Backbone.Complety({
         collection: gradeSix,
